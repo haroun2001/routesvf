@@ -11,6 +11,7 @@ package com.example.routesvf;
  */
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -19,12 +20,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class RouteController {
  @Value("${openrouteservice.api.key}")
     private String apiKey;
-
-    @PostMapping("/route")
+    @GetMapping("/route")
+    public ResponseEntity<String> handleGetRequest() {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Method GET not allowed. Use POST instead.");
+    }
+    @PostMapping(value = "/route")
     public ResponseEntity<?> calculateRoute(@RequestBody Map<String, Object> request) {
         // Récupérer les coordonnées du frontend
         Map<String, Object> start = (Map<String, Object>) request.get("start");
